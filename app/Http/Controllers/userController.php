@@ -366,4 +366,30 @@ class userController extends Controller
         return redirect("/admin/Promo")->with('datas',$data);
 
     }
+
+    public function Pusertransaksi() {
+        return view("usertransaksi");
+    }
+
+    public function Psukses(Request $req){
+
+        $namaFolderPhoto = ""; $namaFilePhoto = "";
+        foreach ($req->file("bukti_transaksi") as $photo) {
+            $namaFilePhoto  = time().".".$photo->getClientOriginalExtension();
+            $namaFolderPhoto = "photo/";
+
+            $photo->storeAs($namaFolderPhoto,$namaFilePhoto, 'public');
+        }
+
+
+        $new = new trans();
+        $new->ID_User = $req->ID_User;
+        $new->Nama_product = $req->nama_product;
+        $new->Harga = $req->Harga;
+        $new->Bukti_Transaksi =$namaFilePhoto;
+        $new->save();
+        return redirect()->back();
+
+
+    }
 }
