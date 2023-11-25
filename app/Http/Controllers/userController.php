@@ -129,13 +129,16 @@ class userController extends Controller
             "username"=>["required"],
             "email"=>["required"],
             "pass"=>["required","min:8"],
-            "pass_confirmation"=>["required"]
+            "pass_confirmation"=>["required"],
+            "ttl"=>["required"]
+
         ])){
             $nama = $req->Fname;
             $username = $req->username;
             $email = $req->email;
             $pass = $req->pass;
             $stat = 1;
+            $ttl = $req->ttl;
             //echo($nama."-".$username."-".$email."-".$pass);
             $new = new Users();
             //$new->add($nama,$username,$email,$pass,$stat);
@@ -144,6 +147,7 @@ class userController extends Controller
             $new->Email = $email;
             $new->Password = $pass;
             $new->Status = $stat;
+            $new->ttl = $ttl;
             $new->save();
             return redirect("/login");
         }
