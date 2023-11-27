@@ -16,7 +16,7 @@
                         <input type="text" class="register_input" name="username" placeholder="Type your username">
                     </div>
                     <div class="register_field">
-                        Email :  <br>
+                        Email <br>
                         <input type="email" class="register_input" name="email" placeholder="Type your email">
                     </div>
                 </div>
