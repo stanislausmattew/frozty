@@ -32,7 +32,7 @@
                     </div>
                     <div class="register_field">
                         Tanggal Lahir : <br>
-                        <input type="text" class="register_input" name="ttl" placeholder="TanggalLahir'dd/mm/yy'">
+                        <input type="date" class="register_input" name="ttl" placeholder="TanggalLahir'dd/mm/yy'">
                     </div>
                     @if ($errors->any())
                         <div class="text-danger">
