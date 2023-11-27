@@ -64,6 +64,17 @@ class userController extends Controller
         }
         return view("admin.admin-listuser",$param);
     }
+    public function HistoryUserList()
+    {
+        if(Session::Has('datas')){
+            $param['datas'] = Session::get('datas');
+        }
+        else{
+            $data = DB::select("select * from transaksi");
+            $param['datas'] = $data;
+        }
+        return view("admin.admin-pesanan",$param);
+    }
     public function OrderList()
     {
         if(Session::Has('datas')){

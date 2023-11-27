@@ -32,6 +32,7 @@ Route::get("/logout",[userController::class,"Logout"]);
 Route::get("/admin/TambahProduct",[userController::class,"Tambah"]);
 Route::get("/admin/Users",[userController::class,"UserList"]);
 Route::get("/admin/Order",[userController::class,"OrderList"]);
+Route::get("/admin/Historyusr",[userController::class,"HistoryUserList"]);
 Route::get("/Hapus/Kategori/{id}",[userController::class,"Hapus"]);
 Route::get("/Hapus/Product/{id}",[userController::class,"HapusProduct"]);
 Route::get("/Unban/{id}",[userController::class,"Unban"]);
