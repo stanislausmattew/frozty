@@ -129,13 +129,16 @@ class userController extends Controller
             "username"=>["required"],
             "email"=>["required"],
             "pass"=>["required","min:8"],
-            "pass_confirmation"=>["required"]
+            "pass_confirmation"=>["required"],
+            "ttl"=>["required"]
+
         ])){
             $nama = $req->Fname;
             $username = $req->username;
             $email = $req->email;
             $pass = $req->pass;
             $stat = 1;
+            $ttl = $req->ttl;
             //echo($nama."-".$username."-".$email."-".$pass);
             $new = new Users();
             //$new->add($nama,$username,$email,$pass,$stat);
@@ -144,6 +147,7 @@ class userController extends Controller
             $new->Email = $email;
             $new->Password = $pass;
             $new->Status = $stat;
+            $new->ttl = $ttl;
             $new->save();
             return redirect("/login");
         }
@@ -364,6 +368,32 @@ class userController extends Controller
         $data =DB::table('promo')
         ->where('Nama','like',"%".$t."%")->get();
         return redirect("/admin/Promo")->with('datas',$data);
+
+    }
+
+    public function Pusertransaksi() {
+        return view("usertransaksi");
+    }
+
+    public function Psukses(Request $req){
+
+        $namaFolderPhoto = ""; $namaFilePhoto = "";
+        foreach ($req->file("bukti_transaksi") as $photo) {
+            $namaFilePhoto  = time().".".$photo->getClientOriginalExtension();
+            $namaFolderPhoto = "photo/";
+
+            $photo->storeAs($namaFolderPhoto,$namaFilePhoto, 'public');
+        }
+
+
+        $new = new trans();
+        $new->ID_User = $req->ID_User;
+        $new->Nama_product = $req->nama_product;
+        $new->Harga = $req->Harga;
+        $new->Bukti_Transaksi =$namaFilePhoto;
+        $new->save();
+        return redirect()->back();
+
 
     }
 }

@@ -21,6 +21,12 @@ Route::get("/", [userController::class,"Home"]);
 Route::get("/Home", [userController::class,"HomeUser"]);
 Route::get("/login",[userController::class,"Login"]);
 Route::get("/register",[userController::class,"Register"]);
+
+Route::get("/usertransaksi",[userController::class,"Pusertransaksi"]);
+Route::post("/usertransaksi",[userController::class,"Psukses"])->name('Psukses');
+
+
+
 Route::get("/admin/Home",[userController::class,"admin"]);
 Route::get("/logout",[userController::class,"Logout"]);
 Route::get("/admin/TambahProduct",[userController::class,"Tambah"]);
@@ -51,3 +57,4 @@ Route::post("/Search/Product",[userController::class,"Spro"]);
 Route::post("/Search/Users",[userController::class,"SUsers"]);
 Route::post("/Search/Pesanan",[userController::class,"Spesanan"]);
 Route::post("/Search/Promo",[userController::class,"Spromo"]);
+
