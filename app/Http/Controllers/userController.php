@@ -103,6 +103,12 @@ class userController extends Controller
         return view('user.pembayaran-user',$param);
     }
 
+    public function Detail_transaksi($id)
+    {
+        $param['ID_USer'] = $id;
+        return view('user.transaksi-user',$param);
+    }
+
     public function History()
     {
         return view('user.history-user');
@@ -306,14 +312,15 @@ class userController extends Controller
             //echo $temps;
             //echo $bank;
             if($t == 'BCA'){
-                return back()->with("status","731055269");
+                return redirect("/usertransaksi")->with("status","731055269");
             }
             else if ($t == 'BNI'){
-                return back()->with("status","0238526667");
+                return redirect("/usertransaksi")->with("status","0238526667");
             }
             else if($t == "BRI"){
-                return back()->with("status","034 102 000 754 304");
+                return redirect("/usertransaksi")->with("status","034 102 000 754 304");
             }
+            return redirect("/usertransaksi");
         }
     }
     public function Kirim(Request $req)
