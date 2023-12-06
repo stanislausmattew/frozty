@@ -188,6 +188,7 @@ h1 {
             <a href="{{url('/user/History')}}" class="logout" >HISTORY</a>
         @else
             <a href="{{url('/login')}}" class="logout" >LOGIN</a>
+            
         @endif
     </header>
 
