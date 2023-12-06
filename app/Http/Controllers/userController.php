@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Promo;
 use App\Models\trans;
 use App\Models\Rate;
+use App\Models\gproduct;
 class userController extends Controller
 {
     //
@@ -196,7 +197,7 @@ class userController extends Controller
         //echo $id;
         $nama = $req->NamaKategori;
         $gambar = $req->Logo;
-        $namagambar = $gambar->getClientOriginalName();
+        $namagambar = "Logo" . $id . $gambar->getClientOriginalExtension();// klu png ya png klaau jpg seterusnya 
         DB::table('product')->where('id', $id)->update([
         'Nama'=>$nama,
         'Gambar'=>$namagambar
@@ -250,7 +251,7 @@ class userController extends Controller
         $Potongan = $req->Potongan;
         $des = $req->Deskripsi;
         $awal = $req->TGL_Awal;
-        $akhir = $req->TGL_END;
+        $akhir = $req->TGL_Akhir;
         //echo $des;
         $AddPromo = new Promo();
         $AddPromo->Add($nama,$Potongan,$des,$awal,$akhir);
@@ -304,33 +305,34 @@ class userController extends Controller
             $t = $req->bank;
             $idusers =$user[0]->id;
             $namaprod = $namapro[0]->Nama;
-            $harga =$req->tot;
+            $harga = $namapro[0]->Harga; //ngambil form harga
             //echo $t;
             $new = new trans();
             $new->add($temps,$idusers,$idGame,$namaprod,$harga,$t);
             //echo $user[0]->id;
             //echo $temps;
             //echo $bank;
+            $idtrans = DB::select("select * from transaksi order by id desc")[0]->ID;
             if($t == 'BCA'){
-                return redirect("/usertransaksi")->with("status","731055269");
+                return view("usertransaksi",["userid" => $idusers, "namaproduk" => $namaprod, "harga" => $harga, "idtrans" => $idtrans])->with("status","731055269");
             }
             else if ($t == 'BNI'){
-                return redirect("/usertransaksi")->with("status","0238526667");
+                return view("usertransaksi",["userid" => $idusers, "namaproduk" => $namaprod, "harga" => $harga, "idtrans" => $idtrans])->with("status","0238526667");
             }
             else if($t == "BRI"){
-                return redirect("/usertransaksi")->with("status","034 102 000 754 304");
+                return view("usertransaksi",["userid" => $idusers, "namaproduk" => $namaprod, "harga" => $harga, "idtrans" => $idtrans])->with("status","034 102 000 754 304");
             }
-            return redirect("/usertransaksi");
+            return view("usertransaksi",["userid" => $idusers, "namaproduk" => $namaprod, "harga" => $harga, "idtrans" => $idtrans]);
         }
     }
     public function Kirim(Request $req)
     {
-        $id = $req->ID;
+        $id = $req->idtransaksi;
         //echo $req->ID;
-        $gambar = $req->Bukti_Transaksi;
-        $namagambar = $gambar->getClientOriginalName();
+        $gambar = $req->bukti_transaksi; // bukti transaksinya ikut form
+        $namagambar = "bukti" . $id . $gambar->getClientOriginalExtension();
         DB::table('transaksi')->where('ID', $id)->update([
-            'Bukti_Transaksi' => $namagambar,
+            'Bukti_Transaksi' => $namagambar, // bukti transaksinya ikut db 
             'Status'=> 1
         ]);
         $gambar->move("BuktiTransaksi",$namagambar);
@@ -411,7 +413,20 @@ class userController extends Controller
         $new->Bukti_Transaksi =$namaFilePhoto;
         $new->save();
         return redirect()->back();
-
-
     }
+
+    public function promouser(){
+        return view("home");
+    }
+
+    public function item($req) {
+        $lapar = new gproduct();
+        $lapar->FkPro = $req->fkpro;
+        $lapar->Nama = $req->nama;
+        $lapar->Harga = $req->Harga;
+        $lapar->save();
+        return redirect()->back();
+    }
+    
+ 
 }
