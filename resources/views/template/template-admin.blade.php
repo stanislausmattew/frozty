@@ -89,9 +89,12 @@
     <div class="square"></div>
     <header>
         <a href="/admin/Home"><div class="logo"><img src="{{ asset('Image/logo.png') }}"></div></a>
-        <a href="{{url('/')}}" class="logout" >LOGOUT</a>
-    </header>
+        <a href="{{url('/')}}" class="logout" >LOGOUT </a>
 
+
+
+    </header>
+    
     @yield('content')
 
     <footer>

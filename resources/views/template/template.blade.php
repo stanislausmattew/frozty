@@ -69,7 +69,7 @@
     <header>
         <a href="/"><div class="logo"><img src="Image/logo.png"></div></a>
    </header>
-
+   
     @yield('content')
 
     <footer>
