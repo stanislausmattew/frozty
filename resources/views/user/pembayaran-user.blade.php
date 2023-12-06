@@ -13,7 +13,8 @@
         <div class="left-content">
 
             @php
-                $id = $ids;
+                $id = $ids; 
+                // munculin nomer id transaksi
                 $data = \DB::select("select * from product where id = '$id'");
             @endphp
             @foreach ($data as $gambar)
@@ -90,8 +91,11 @@
                 </select><br>
                 <label id="label"></label>
                 <input type="hidden" name="tot" id="tot">
+            <a href="/usertransaksi">
                 <button class="btn btn-dark" style="margin-top: 100px;">Beli sekarang</button>
+            </a>
             </form>
+           
         </div>
     </div>
     <script>
