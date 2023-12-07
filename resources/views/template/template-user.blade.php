@@ -184,8 +184,12 @@ h1 {
     <header style="z-index: 5;">
         <a href="/"><div class="logo"><img src="{{asset('Image/logo.png')}}"></div></a>
         @if (session()->has("login"))
-            <a href="{{url('/logout')}}" class="logout" >LOGOUT</a>
+            <a href="{{url('/user/Game')}}" class="logout" >GAMES</a>
+            <a href="{{url('/user/Promo')}}" class="logout" >PROMO</a>
+            <a href="{{url('/user/Item')}}" class="logout" >ITEM</a>
+
             <a href="{{url('/user/History')}}" class="logout" >HISTORY</a>
+            <a href="{{url('/logout')}}" class="logout" >LOGOUT</a>
         @else
             <a href="{{url('/login')}}" class="logout" >LOGIN</a>
             

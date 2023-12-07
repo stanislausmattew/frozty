@@ -116,6 +116,11 @@ class userController extends Controller
         //echo $id[0]->id;
     }
 
+    public function GameUser()
+    {
+        return view('user.game-user');
+        //echo $id[0]->id;
+    }
     public function Plogin(Request $req)
     {
         if($req->input('username') == "admin" && $req->input('pass') == "admin"){
@@ -416,7 +421,7 @@ class userController extends Controller
     }
 
     public function promouser(){
-        return view("home");
+        return view("promouser");
     }
 
     public function item($req) {
