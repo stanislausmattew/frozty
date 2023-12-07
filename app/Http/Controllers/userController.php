@@ -197,7 +197,7 @@ class userController extends Controller
         //echo $id;
         $nama = $req->NamaKategori;
         $gambar = $req->Logo;
-        $namagambar = "Logo" . $id . $gambar->getClientOriginalExtension();// klu png ya png klaau jpg seterusnya 
+        $namagambar = "Logo" . $id . '.'. $gambar->getClientOriginalExtension();// klu png ya png klaau jpg seterusnya 
         DB::table('product')->where('id', $id)->update([
         'Nama'=>$nama,
         'Gambar'=>$namagambar
@@ -330,7 +330,7 @@ class userController extends Controller
         $id = $req->idtransaksi;
         //echo $req->ID;
         $gambar = $req->bukti_transaksi; // bukti transaksinya ikut form
-        $namagambar = "bukti" . $id . $gambar->getClientOriginalExtension();
+        $namagambar = "bukti" . $id . '.' . $gambar->getClientOriginalExtension();
         DB::table('transaksi')->where('ID', $id)->update([
             'Bukti_Transaksi' => $namagambar, // bukti transaksinya ikut db 
             'Status'=> 1
