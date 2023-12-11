@@ -12,8 +12,8 @@ class Users extends Model
     public $primaryKey = "id";
     public $incrementing = true;
     public $timestamps = false;
-    public $fillable = ['id','Nama','Username','Email','Password','Status','ttl'];
-    public function add($nama,$username,$email,$pass,$stat,$ttl)
+    public $fillable = ['id','Nama','Username','Email','Password','Status','ttl','saldo'];
+    public function add($nama,$username,$email,$pass,$stat,$ttl,$saldo)
     {
         $new = new user();
         $new->Nama = $nama;
@@ -22,6 +22,7 @@ class Users extends Model
         $new->Password = $pass;
         $new->Status =$stat;
         $new->ttl =$ttl;
+        $new->Saldo =$saldo;
         $new->save();
     }
 }

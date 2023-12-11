@@ -100,7 +100,7 @@
         </div> -- --}} 
 
         <div class="coba">
-            <form action="/SEND" method="POST" enctype="multipart/form-data">
+            <form action="/SEND" method="POST">
                 @csrf
                 <label for="nama">Id Transaksi:</label>
                 <input type="text" id="user" name="idtransaksi" value="{{$idtrans}}" required>
@@ -110,8 +110,6 @@
 
                 <label for="email">Harga:</label>
                 <input type="text" id="harga" name="harga" value="{{$harga}}" required>
-                <label for="">Bukti Transaksi</label> 
-                <input type="file" class="login_input" name="bukti_transaksi">
                 <button type="submit">Konfirmasi</button>
             </form>
         </div>

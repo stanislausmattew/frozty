@@ -19,6 +19,10 @@
                     <button class="btn btn-success">Search</button>
                 </div> --}}
             </div>
+            <div style="font-size:20px">
+                
+                {{$status}}
+            </div>
             <div class="table-responsive" style="overflow-y: auto; height: 400px; background-color: hsla(0, 0%, 100%, 0.7);" >
                 <table class="table">
                     <thead class="table-dark" style="position: sticky; top:0;">

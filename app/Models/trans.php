@@ -12,8 +12,8 @@ class trans extends Model
     public $primaryKey = "id";
     public $incrementing = false;
     public $timestamps = false;
-    public $fillable = ['ID','ID_User','ID_GAME','Nama_Product','Harga','Metode_Pembayaran','Bukti_Transaksi','Status'];
-    public function Add($ID,$ID_User,$ID_Game,$Nama_Pro,$harga,$t)
+    public $fillable = ['ID','ID_User','ID_GAME','Nama_Product','Harga','Bukti_Transaksi','Status'];
+    public function Add($ID,$ID_User,$ID_Game,$Nama_Pro,$harga)
     {
         $new = new trans();
         $new->ID = $ID;
@@ -21,7 +21,6 @@ class trans extends Model
         $new->ID_GAME = $ID_Game;
         $new->Nama_Product =$Nama_Pro;
         $new->Harga = $harga;
-        $new->Metode_Pembayaran =$t;
         $new->Status = 0;
         $new->save();
     }

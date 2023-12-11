@@ -56,27 +56,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="box">
-                    <h3>Metode Pembayaran</h2>
-                    <label class="custom-radio">
-                        <input type="radio" name="bank" id="" value="BCA">
-                        <div class="radio-btns">
-                        <img src="{{asset('Image/bca.png')}}" style="width: 120px;" alt="">
-                        </div>
-                    </label>
-                    <label class="custom-radio">
-                        <input type="radio" name="bank" id="" value="BNI">
-                        <div class="radio-btns">
-                        <img src="{{asset('Image/bni.png')}}" style="width: 120px;" alt="">
-                        </div>
-                    </label>
-                    <label class="custom-radio">
-                        <input type="radio" name="bank" id="" value="BRI">
-                        <div class="radio-btns" style="width: 105px;">
-                        <img src="{{asset('Image/bri.png')}}" style="width: 100px; height:47px;" alt="">
-                        </div>
-                    </label>
-                </div>
+               
                 <select name="promo" id="promo">
                     <option value="0">-</option>
                     @php

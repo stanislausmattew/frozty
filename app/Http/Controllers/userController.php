@@ -12,6 +12,8 @@ use App\Models\Promo;
 use App\Models\trans;
 use App\Models\Rate;
 use App\Models\gproduct;
+use Illuminate\Support\Facades\Redis;
+
 class userController extends Controller
 {
     //
@@ -112,7 +114,7 @@ class userController extends Controller
 
     public function History()
     {
-        return view('user.history-user');
+        return view('user.history-user',['status'=>'']);
         //echo $id[0]->id;
     }
 
@@ -162,6 +164,7 @@ class userController extends Controller
             $pass = $req->pass;
             $stat = 1;
             $ttl = $req->ttl;
+            $saldo = $req->saldo;
             //echo($nama."-".$username."-".$email."-".$pass);
             $new = new Users();
             //$new->add($nama,$username,$email,$pass,$stat);
@@ -171,6 +174,7 @@ class userController extends Controller
             $new->Password = $pass;
             $new->Status = $stat;
             $new->ttl = $ttl;
+            $new->Saldo = $saldo;
             $new->save();
             return redirect("/login");
         }
@@ -318,30 +322,37 @@ class userController extends Controller
             //echo $temps;
             //echo $bank;
             $idtrans = DB::select("select * from transaksi order by id desc")[0]->ID;
-            if($t == 'BCA'){
-                return view("usertransaksi",["userid" => $idusers, "namaproduk" => $namaprod, "harga" => $harga, "idtrans" => $idtrans])->with("status","731055269");
-            }
-            else if ($t == 'BNI'){
-                return view("usertransaksi",["userid" => $idusers, "namaproduk" => $namaprod, "harga" => $harga, "idtrans" => $idtrans])->with("status","0238526667");
-            }
-            else if($t == "BRI"){
-                return view("usertransaksi",["userid" => $idusers, "namaproduk" => $namaprod, "harga" => $harga, "idtrans" => $idtrans])->with("status","034 102 000 754 304");
-            }
             return view("usertransaksi",["userid" => $idusers, "namaproduk" => $namaprod, "harga" => $harga, "idtrans" => $idtrans]);
         }
     }
     public function Kirim(Request $req)
     {
         $id = $req->idtransaksi;
+        $users = session()->get("login");
+        $user = DB::select("select * from users where Username = '$users'");
+        $idusers =$user[0]->id;
+        $Saldo = DB::select("select * from users where id = $idusers")[0]->Saldo - $req->harga;
         //echo $req->ID;
-        $gambar = $req->bukti_transaksi; // bukti transaksinya ikut form
-        $namagambar = "bukti" . $id . '.' . $gambar->getClientOriginalExtension();
-        DB::table('transaksi')->where('ID', $id)->update([
-            'Bukti_Transaksi' => $namagambar, // bukti transaksinya ikut db 
-            'Status'=> 1
-        ]);
-        $gambar->move("BuktiTransaksi",$namagambar);
-        return redirect("/user/History");
+        if ($Saldo < 0) {
+            // return redirect("/user/History")->with('eror','Kamu gagal gpp coba lagi ya ');
+            return view('user.history-user',['status'=>'jangan sedih kalau belum masuk bisa ulang tahun depan ']);
+            
+        }
+
+        else {
+            DB::table('users')->where('id', $idusers)->update([
+                'Saldo'=>$Saldo
+            ]);
+    
+            DB::table('transaksi')->where('id', $id)->update([
+                'Status'=>2
+            ]);
+
+            return view('user.history-user',['status'=>'saldo masuk ya ']);
+            
+            // return redirect("/user/History");
+        }
+      
     }
     public function Up($id)
     {
@@ -400,22 +411,12 @@ class userController extends Controller
         return view("usertransaksi");
     }
 
-    public function Psukses(Request $req){
-
-        $namaFolderPhoto = ""; $namaFilePhoto = "";
-        foreach ($req->file("bukti_transaksi") as $photo) {
-            $namaFilePhoto  = time().".".$photo->getClientOriginalExtension();
-            $namaFolderPhoto = "photo/";
-
-            $photo->storeAs($namaFolderPhoto,$namaFilePhoto, 'public');
-        }
-
+    public function Psukses(Request $req){    
 
         $new = new trans();
         $new->ID_User = $req->ID_User;
         $new->Nama_product = $req->nama_product;
         $new->Harga = $req->Harga;
-        $new->Bukti_Transaksi =$namaFilePhoto;
         $new->save();
         return redirect()->back();
     }
