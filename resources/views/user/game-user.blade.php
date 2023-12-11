@@ -9,6 +9,13 @@
     <div class="left-content">
         <div class="lf">
             <h2 style="color: white;">List Game</h2>
+            <div class="search" style="display: flex;">
+                    <form action="{{url('/Search/Product')}}" method="post">
+                        @csrf
+                        <input type="text" name="search" placeholder="Search here" >
+                        <button class="btn btn-success">Search</button>
+                    </form>
+                </div>
             <div class="box-container">
             @php
                 $data = \DB::select("select * from product")
