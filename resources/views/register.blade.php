@@ -16,7 +16,7 @@
                         <input type="text" class="register_input" name="username" placeholder="Type your username">
                     </div>
                     <div class="register_field">
-                        Email_asu :  <br>
+                        Email:  <br>
                         <input type="email" class="register_input" name="email" placeholder="Type your email">
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="register_field">
                         Tanggal Lahir : <br>
-                        <input type="text" class="register_input" name="ttl" placeholder="TanggalLahir'dd/mm/yy'">
+                        <input type="date" class="register_input" name="ttl" placeholder="TanggalLahir'dd/mm/yy'">
                     </div>
                     @if ($errors->any())
                         <div class="text-danger">

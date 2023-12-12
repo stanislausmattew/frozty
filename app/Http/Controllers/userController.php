@@ -11,6 +11,8 @@ use App\Models\Product;
 use App\Models\Promo;
 use App\Models\trans;
 use App\Models\Rate;
+use Illuminate\Support\Facades\Hash;
+
 class userController extends Controller
 {
     //
@@ -136,7 +138,7 @@ class userController extends Controller
             $nama = $req->Fname;
             $username = $req->username;
             $email = $req->email;
-            $pass = $req->pass;
+            $pass =  Hash::make($req->password);
             $stat = 1;
             $ttl = $req->ttl;
             //echo($nama."-".$username."-".$email."-".$pass);
