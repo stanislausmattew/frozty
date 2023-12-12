@@ -23,7 +23,7 @@ Route::get("/login",[userController::class,"Login"]);
 Route::get("/register",[userController::class,"Register"]);
 
 Route::get("/usertransaksi",[userController::class,"Pusertransaksi"]);
-Route::post("/usertransaksi",[userController::class,"Psukses"])->name('Psukses');
+Route::post("/usertransaksi",[userController::class,"Psukses"]);
 
 Route::get('/forgot-password', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 Route::post('/forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -33,13 +33,19 @@ Route::get("/logout",[userController::class,"Logout"]);
 Route::get("/admin/TambahProduct",[userController::class,"Tambah"]);
 Route::get("/admin/Users",[userController::class,"UserList"]);
 Route::get("/admin/Order",[userController::class,"OrderList"]);
+Route::get("/admin/Historyusr",[userController::class,"HistoryUserList"]);
 Route::get("/Hapus/Kategori/{id}",[userController::class,"Hapus"]);
 Route::get("/Hapus/Product/{id}",[userController::class,"HapusProduct"]);
+Route::get("/Edit/Product/{id}",[userController::class,"EditProduct"]);
+
 Route::get("/Unban/{id}",[userController::class,"Unban"]);
 Route::get("/Ban/{id}",[userController::class,"Ban"]);
 Route::get("/Hapus/Promo/{id}",[userController::class,"HapusPromo"]);
 Route::get("/Game/{id}",[userController::class,"Detail"]);
 Route::get("/user/History",[userController::class,"History"]);
+Route::get("/user/Game",[userController::class,"GameUser"]);
+Route::get("/user/Promo",[userController::class,"promouser"]);
+Route::get("/user/Item",[userController::class,"item"]);
 Route::get("/admin/Promo",[userController::class,"Promo"]);
 Route::get("/Update/{id}",[userController::class,"Up"]);
 Route::get("/admin/Laporan",[userController::class,"Laporan"]);
@@ -49,9 +55,14 @@ Route::post("/Tambah_Kategori",[userController::class,"TambahKategori"]);
 Route::post("/admin/TambahGProduct",[userController::class,"PTambah"]);
 Route::post("/product/Update",[userController::class,"Update"]);
 Route::post("/gproduct/Update",[userController::class,"GUpdate"]);
+
 Route::post("/Tambah/Promo",[userController::class,"TambahPromo"]);
+
+
 Route::post("/Edit/Promo",[userController::class,"EditPromo"]);
+
 Route::post("/Pesan",[userController::class,"Pesan"]);
+
 Route::post("/SEND",[userController::class,"Kirim"]);
 Route::post("/Rating",[userController::class,"Rate"]);
 Route::post("/Search/Product",[userController::class,"Spro"]);

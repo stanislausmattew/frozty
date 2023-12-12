@@ -12,6 +12,9 @@ use App\Models\Promo;
 use App\Models\trans;
 use App\Models\Rate;
 use Illuminate\Support\Facades\Hash;
+use App\Models\gproduct;
+use Illuminate\Support\Facades\Redis;
+
 
 class userController extends Controller
 {
@@ -66,6 +69,17 @@ class userController extends Controller
         }
         return view("admin.admin-listuser",$param);
     }
+    public function HistoryUserList()
+    {
+        if(Session::Has('datas')){
+            $param['datas'] = Session::get('datas');
+        }
+        else{
+            $data = DB::select("select * from transaksi");
+            $param['datas'] = $data;
+        }
+        return view("admin.admin-pesanan",$param);
+    }
     public function OrderList()
     {
         if(Session::Has('datas')){
@@ -94,12 +108,23 @@ class userController extends Controller
         return view('user.pembayaran-user',$param);
     }
 
+    public function Detail_transaksi($id)
+    {
+        $param['ID_USer'] = $id;
+        return view('user.transaksi-user',$param);
+    }
+
     public function History()
     {
-        return view('user.history-user');
+        return view('user.history-user',['status'=>'']);
         //echo $id[0]->id;
     }
 
+    public function GameUser()
+    {
+        return view('user.game-user');
+        //echo $id[0]->id;
+    }
     public function Plogin(Request $req)
     {
         if($req->input('username') == "admin" && $req->input('pass') == "admin"){
@@ -141,6 +166,7 @@ class userController extends Controller
             $pass =  Hash::make($req->password);
             $stat = 1;
             $ttl = $req->ttl;
+            $saldo = $req->saldo;
             //echo($nama."-".$username."-".$email."-".$pass);
             $new = new Users();
             //$new->add($nama,$username,$email,$pass,$stat);
@@ -150,6 +176,7 @@ class userController extends Controller
             $new->Password = $pass;
             $new->Status = $stat;
             $new->ttl = $ttl;
+            $new->Saldo = $saldo;
             $new->save();
             return redirect("/login");
         }
@@ -181,7 +208,7 @@ class userController extends Controller
         //echo $id;
         $nama = $req->NamaKategori;
         $gambar = $req->Logo;
-        $namagambar = $gambar->getClientOriginalName();
+        $namagambar = "Logo" . $id . '.'. $gambar->getClientOriginalExtension();// klu png ya png klaau jpg seterusnya 
         DB::table('product')->where('id', $id)->update([
         'Nama'=>$nama,
         'Gambar'=>$namagambar
@@ -235,7 +262,7 @@ class userController extends Controller
         $Potongan = $req->Potongan;
         $des = $req->Deskripsi;
         $awal = $req->TGL_Awal;
-        $akhir = $req->TGL_END;
+        $akhir = $req->TGL_Akhir;
         //echo $des;
         $AddPromo = new Promo();
         $AddPromo->Add($nama,$Potongan,$des,$awal,$akhir);
@@ -289,36 +316,45 @@ class userController extends Controller
             $t = $req->bank;
             $idusers =$user[0]->id;
             $namaprod = $namapro[0]->Nama;
-            $harga =$req->tot;
+            $harga = $namapro[0]->Harga; //ngambil form harga
             //echo $t;
             $new = new trans();
             $new->add($temps,$idusers,$idGame,$namaprod,$harga,$t);
             //echo $user[0]->id;
             //echo $temps;
             //echo $bank;
-            if($t == 'BCA'){
-                return back()->with("status","731055269");
-            }
-            else if ($t == 'BNI'){
-                return back()->with("status","0238526667");
-            }
-            else if($t == "BRI"){
-                return back()->with("status","034 102 000 754 304");
-            }
+            $idtrans = DB::select("select * from transaksi order by id desc")[0]->ID;
+            return view("usertransaksi",["userid" => $idusers, "namaproduk" => $namaprod, "harga" => $harga, "idtrans" => $idtrans]);
         }
     }
     public function Kirim(Request $req)
     {
-        $id = $req->ID;
+        $id = $req->idtransaksi;
+        $users = session()->get("login");
+        $user = DB::select("select * from users where Username = '$users'");
+        $idusers =$user[0]->id;
+        $Saldo = DB::select("select * from users where id = $idusers")[0]->Saldo - $req->harga;
         //echo $req->ID;
-        $gambar = $req->Bukti_Transaksi;
-        $namagambar = $gambar->getClientOriginalName();
-        DB::table('transaksi')->where('ID', $id)->update([
-            'Bukti_Transaksi' => $namagambar,
-            'Status'=> 1
-        ]);
-        $gambar->move("BuktiTransaksi",$namagambar);
-        return redirect("/user/History");
+        if ($Saldo < 0) {
+            // return redirect("/user/History")->with('eror','Kamu gagal gpp coba lagi ya ');
+            return view('user.history-user',['status'=>'jangan sedih kalau belum masuk bisa ulang tahun depan ']);
+            
+        }
+
+        else {
+            DB::table('users')->where('id', $idusers)->update([
+                'Saldo'=>$Saldo
+            ]);
+    
+            DB::table('transaksi')->where('id', $id)->update([
+                'Status'=>2
+            ]);
+
+            return view('user.history-user',['status'=>'saldo masuk ya ']);
+            
+            // return redirect("/user/History");
+        }
+      
     }
     public function Up($id)
     {
@@ -377,25 +413,28 @@ class userController extends Controller
         return view("usertransaksi");
     }
 
-    public function Psukses(Request $req){
-
-        $namaFolderPhoto = ""; $namaFilePhoto = "";
-        foreach ($req->file("bukti_transaksi") as $photo) {
-            $namaFilePhoto  = time().".".$photo->getClientOriginalExtension();
-            $namaFolderPhoto = "photo/";
-
-            $photo->storeAs($namaFolderPhoto,$namaFilePhoto, 'public');
-        }
-
+    public function Psukses(Request $req){    
 
         $new = new trans();
         $new->ID_User = $req->ID_User;
         $new->Nama_product = $req->nama_product;
         $new->Harga = $req->Harga;
-        $new->Bukti_Transaksi =$namaFilePhoto;
         $new->save();
         return redirect()->back();
-
-
     }
+
+    public function promouser(){
+        return view("promouser");
+    }
+
+    public function item($req) {
+        $lapar = new gproduct();
+        $lapar->FkPro = $req->fkpro;
+        $lapar->Nama = $req->nama;
+        $lapar->Harga = $req->Harga;
+        $lapar->save();
+        return redirect()->back();
+    }
+    
+ 
 }

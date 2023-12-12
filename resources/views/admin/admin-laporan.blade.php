@@ -53,19 +53,19 @@
             <table class="table" id="Laporan">
                 <thead class="table-dark" style="position: sticky; top:0;">
                     <tr>
-                        <th scope="col">ID</th>
+                        <th scope="col">Id</th>
                         <th scope="col">Tanggal Transaksi</th>
-                        <th scope="col">Deskripsi</th>
-                        <th scope="col">Pendapatan</th>
+                        <th scope="col">Detail transaksi</th>
+                        <th scope="col">Pendapatan tiap transaksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
-                        $data = $datas;
-                        $t = 0;
-                        foreach ($data as $key) {
-                            $t += (int)$key->Harga;
-                        }
+                    $data = $datas;
+                    $t = 0;
+                    foreach ($data as $key) {
+                    $t += (int)$key->Harga;
+                    }
                     @endphp
                     @foreach ($data as $promo)
                         <tr>

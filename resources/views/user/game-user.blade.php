@@ -3,67 +3,32 @@
 @extends("template.template-user")
 
 @section("content")
-
 <div class="square" style="z-index: 1;"></div>
-    <div class="container" style="z-index: 4; position: relative;" >
-        <div class="left-content">
-            <div class="lf">
-                <h2 style="color: white;"></h2>
-                <div class="box-container">
-                @php
-                    $data = \DB::select("select * from product")
-                @endphp
-                @foreach ($data as $pro)
-                    <a href="{{url('/Game/'.$pro->id)}}" class="box-1">
-                        <img src="{{asset('Product/'.$pro->Gambar)}}" alt="">
-                        <p>{{$pro->Nama}}</p>
-                    </a>
-                @endforeach
+
+<div class="container" style="z-index: 4; position: relative;" >
+    <div class="left-content">
+        <div class="lf">
+            <h2 style="color: white;">List Game</h2>
+            <div class="search" style="display: flex;">
+                    <form action="{{url('/Search/Product')}}" method="post">
+                        @csrf
+                        <input type="text" name="search" placeholder="Search here" >
+                        <button class="btn btn-success">Search</button>
+                    </form>
                 </div>
+            <div class="box-container">
+            @php
+                $data = \DB::select("select * from product")
+            @endphp
+            @foreach ($data as $pro)
+                <a href="{{url('/Game/'.$pro->id)}}" class="box-1">
+                    <img src="{{asset('Product/'.$pro->Gambar)}}" alt="">
+                    <p>{{$pro->Nama}}</p>
+                </a>
+            @endforeach
             </div>
         </div>
-
-        {{-- right-content jok mbok ubah2 ngomongo aku mau ngubah --}}
-        <div class="right-content">
-            <div class="slider">
-                <div class="slide">
-                    <input type="radio" name="radio-btn" id="radio1">
-                    <input type="radio" name="radio-btn" id="radio2">
-                    <input type="radio" name="radio-btn" id="radio3">
-                    <input type="radio" name="radio-btn" id="radio4">
-
-                    <div class="st first">
-                        <img src="Image/voucher1.jpg" alt="">
-                    </div>
-
-                    <div class="st">
-                        <img src="Image/voucher2.jpg" alt="">
-                    </div>
-
-                    <div class="st">
-                        <img src="Image/voucher3.jpg" alt="">
-                    </div>
-
-                    <div class="st">
-                        <img src="Image/voucher4.jpg" alt="">
-                    </div>
-
-                    <div class="nav-auto">
-                        <div class="a-b1"></div>
-                        <div class="a-b2"></div>
-                        <div class="a-b3"></div>
-                        <div class="a-b4"></div>
-                    </div>
-
-                    <div class="nav-m">
-                        <label for="radio1" class="m-btn"></label>
-                        <label for="radio2" class="m-btn"></label>
-                        <label for="radio3" class="m-btn"></label>
-                        <label for="radio4" class="m-btn"></label>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
 
         <div class="slogan">
             <p>Top-up murah dan terpercaya, kami menyediakan pelayanan cepat dan ramah. Ayo pesan sekarang!</p>
