@@ -25,7 +25,8 @@ Route::get("/register",[userController::class,"Register"]);
 Route::get("/usertransaksi",[userController::class,"Pusertransaksi"]);
 Route::post("/usertransaksi",[userController::class,"Psukses"])->name('Psukses');
 
-
+Route::get('/forgot-password', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('/forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 
 Route::get("/admin/Home",[userController::class,"admin"]);
 Route::get("/logout",[userController::class,"Logout"]);
