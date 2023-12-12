@@ -11,19 +11,19 @@
                 @csrf
                 <div class="login_field">
                     ID_User<br>
-                    <input type="text" class="login_input" name="ID_User" placeholder="Type your username">
+                    <input type="text" class="login_input" name="ID_User" placeholder="Type your ID_User">
                 </div>
                 <div class="login_field">
                     Nama_product <br>
-                    <input type="password" class="login_input" name="nama_product" placeholder="Type your password">
+                    <input type="password" class="login_input" name="nama_product" placeholder="Type your Nama_Product">
                 </div>
                 <div class="login_field">
                     Harga <br>
-                    <input type="password" class="login_input" name="Harga" placeholder="Type your password">
+                    <input type="password" class="login_input" name="Harga" placeholder="Type your Harga">
                 </div>
                 <div class="login_field">
                     Bukti Transaksi <br>
-                    <input type="file" class="login_input" name="bukti_transaksi[]" placeholder="Type your password">
+                    <input type="file" class="login_input" name="bukti_transaksi[]" placeholder="Type your Bukti Transaksi ">
                 </div>
                 {{-- <a href="#">Forgot password?</a> <br> --}}
                 <span data-toggle="modal" data-target="#exampleModal">Forgot password?</span>

@@ -9,6 +9,9 @@
         <div class="left-content">
             <div class="lf">
                 <h2 style="color: white;">List Babi</h2>
+                <h2 style="color: white;">User</h2>
+                <h2 style="color: white;">List Babi</h2>
+
                 <div class="box-container">
                 @php
                     $data = \DB::select("select * from product")
