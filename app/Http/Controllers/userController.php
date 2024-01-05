@@ -21,7 +21,14 @@ class userController extends Controller
         return view("home");
     }
     public function HomeUser(){
-        return view("user.home-user");
+        $param = Session::get('login');
+        $data = DB::select("select * from users where username = '$param'");
+        $saldo = 0;
+        foreach ($data as $key ) {
+        $saldo = $key->Saldo;
+        }
+        return view("user.home-user",['Saldo'=>$saldo]);
+       
     }
     public function Logout()
     {
@@ -143,7 +150,6 @@ class userController extends Controller
                     }
                 }
             }
-
         }
     }
     public function Pregister(Request $req)
@@ -433,6 +439,18 @@ class userController extends Controller
         $lapar->save();
         return redirect()->back();
     }
+
+    public function Pmengtopup() {
+        return view("topup");
+    }
     
+    public function Ptopup(Request $req){    
+
+        $new = new trans();
+        $new->Id_user = $req->mengid;
+        $new->Nominal = $req->nom;
+        $new->save();
+        return redirect()->back();
+    }
  
 }

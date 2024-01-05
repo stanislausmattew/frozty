@@ -25,6 +25,8 @@ Route::get("/register",[userController::class,"Register"]);
 Route::get("/usertransaksi",[userController::class,"Pusertransaksi"]);
 Route::post("/usertransaksi",[userController::class,"Psukses"]);
 
+Route::post("/topup",[userController::class,"Ptopup"]);
+Route::get("/topup",[userController::class,"Pmengtopup"]);
 
 
 Route::get("/admin/Home",[userController::class,"admin"]);

@@ -9,6 +9,10 @@
     <div class="left-content">
         <div class="lf">
             <h2 style="color: white;">List Produk</h2>
+            <h6>
+               Saldo : {{$Saldo}} 
+            </h6>
+         
             <div class="box-container">
             @php
                 $data = \DB::select("select * from product")
