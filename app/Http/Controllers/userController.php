@@ -11,8 +11,10 @@ use App\Models\Product;
 use App\Models\Promo;
 use App\Models\trans;
 use App\Models\Rate;
+use Illuminate\Support\Facades\Hash;
 use App\Models\gproduct;
 use Illuminate\Support\Facades\Redis;
+
 
 class userController extends Controller
 {
@@ -167,7 +169,7 @@ class userController extends Controller
             $nama = $req->Fname;
             $username = $req->username;
             $email = $req->email;
-            $pass = $req->pass;
+            $pass =  Hash::make($req->password);
             $stat = 1;
             $ttl = $req->ttl;
             $saldo = $req->saldo;
