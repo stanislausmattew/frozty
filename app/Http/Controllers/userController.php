@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -13,6 +14,8 @@ use App\Models\trans;
 use App\Models\Rate;
 use Illuminate\Support\Facades\Hash;
 use App\Models\gproduct;
+use App\Models\topup;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redis;
 
 
@@ -141,7 +144,7 @@ class userController extends Controller
         else {
             $data = DB::select("select * from users");
             foreach ($data as $key ) {
-                if(($key->Email == $req->username || $key->Username == $req->username)&& $req->pass == $key->Password  ){
+                if(($key->Email == $req->username || $key->Username == $req->username)&& Hash::check($req->pass, $key->Password)){
                     if($key->Status == 1){
                         $users = $key->Username;
                         //echo $users;
@@ -169,7 +172,7 @@ class userController extends Controller
             $nama = $req->Fname;
             $username = $req->username;
             $email = $req->email;
-            $pass =  Hash::make($req->password);
+            $pass =  bcrypt($req->pass);
             $stat = 1;
             $ttl = $req->ttl;
             $saldo = $req->saldo;
@@ -183,6 +186,9 @@ class userController extends Controller
             $new->Status = $stat;
             $new->ttl = $ttl;
             $new->Saldo = $saldo;
+            // $subject = "Email Confirmation";
+            // $body = "Selamat anda berhasil mendaftar". $req->nama;
+            // Mail::to($req->email)->send(new SendMail($req->name, $subject, $body));
             $new->save();
             return redirect("/login");
         }
@@ -433,13 +439,17 @@ class userController extends Controller
         return view("promouser");
     }
 
-    public function item($req) {
+    public function mengitem(Request $req) {
         $lapar = new gproduct();
         $lapar->FkPro = $req->fkpro;
         $lapar->Nama = $req->nama;
-        $lapar->Harga = $req->Harga;
+        $lapar->Harga = $req->harga;
         $lapar->save();
         return redirect()->back();
+    }
+
+    public function item() {
+        return view("item");
     }
 
     public function Pmengtopup() {
@@ -448,7 +458,7 @@ class userController extends Controller
     
     public function Ptopup(Request $req){    
 
-        $new = new trans();
+        $new = new topup();
         $new->Id_user = $req->mengid;
         $new->Nominal = $req->nom;
         $new->save();

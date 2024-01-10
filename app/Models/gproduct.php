@@ -15,7 +15,7 @@ class gproduct extends Model
     public $fillable = ['id','FkPro',"Nama","Harga"];
     public function add($fkpro,$nama,$harga)
     {
-        $new = new Kategori();
+        $new = new gproduct();
         $new->FkPro = $fkpro;
         $new->Nama = $nama;
         $new->Harga = $harga;

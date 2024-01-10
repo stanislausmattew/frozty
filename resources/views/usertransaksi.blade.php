@@ -105,7 +105,7 @@
                 <label for="nama">Id Transaksi:</label>
                 <input type="text" id="user" name="idtransaksi" value="{{$idtrans}}" required>
             
-                <label for="email">Nominal Top Up:</label>
+                <label for="email">Nama Product:</label>
                 <input type="text" id="nominal" name="nominal" value="{{$namaproduk}}" required>
 
                 <label for="email">Harga:</label>

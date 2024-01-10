@@ -25,8 +25,12 @@ Route::get("/register",[userController::class,"Register"]);
 Route::get("/usertransaksi",[userController::class,"Pusertransaksi"]);
 Route::post("/usertransaksi",[userController::class,"Psukses"]);
 
-Route::post("/topup",[userController::class,"Ptopup"]);
+
 Route::get("/topup",[userController::class,"Pmengtopup"]);
+Route::post("/topup",[userController::class,"Ptopup"]);
+
+Route::get("/item",[userController::class,"Pmengitem"]);
+Route::post("/item",[userController::class,"Pitem"]);
 
 
 Route::get("/admin/Home",[userController::class,"admin"]);
@@ -46,7 +50,10 @@ Route::get("/Game/{id}",[userController::class,"Detail"]);
 Route::get("/user/History",[userController::class,"History"]);
 Route::get("/user/Game",[userController::class,"GameUser"]);
 Route::get("/user/Promo",[userController::class,"promouser"]);
+
 Route::get("/user/Item",[userController::class,"item"]);
+
+
 Route::get("/admin/Promo",[userController::class,"Promo"]);
 Route::get("/Update/{id}",[userController::class,"Up"]);
 Route::get("/admin/Laporan",[userController::class,"Laporan"]);
