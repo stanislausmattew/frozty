@@ -12,7 +12,7 @@
         @endif
 
         <div class="coba">
-            <form action="/SEND" method="POST">
+            <form action="/topup" method="POST">
                 @csrf
                 <label for="nama">ID:</label>
                 <input type="text" id="id" name="mengid"  required>

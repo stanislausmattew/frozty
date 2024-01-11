@@ -15,9 +15,10 @@ use App\Models\Rate;
 use Illuminate\Support\Facades\Hash;
 use App\Models\gproduct;
 use App\Models\topup;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redis;
-
+use Illuminate\Support\Facades\Schema;
 
 class userController extends Controller
 {
@@ -30,8 +31,10 @@ class userController extends Controller
         $data = DB::select("select * from users where username = '$param'");
         $saldo = 0;
         foreach ($data as $key ) {
-        $saldo = $key->Saldo;
+            $saldo = $key->Saldo;
         }
+
+        if ($saldo == null) $saldo = 0;
         return view("user.home-user",['Saldo'=>$saldo]);
 
     }
@@ -186,11 +189,12 @@ class userController extends Controller
             $new->Status = $stat;
             $new->ttl = $ttl;
             $new->Saldo = $saldo;
-            // $subject = "Email Confirmation";
-            // $body = "Selamat anda berhasil mendaftar". $req->nama;
-            // Mail::to($req->email)->send(new SendMail($req->name, $subject, $body));
-            $new->save();
-            return redirect("/login");
+            $subject = "Email Confirmation";
+            $body = "Selamat anda berhasil mendaftar". $req->nama;
+            Mail::to($req->email)->send(new SendMail($req->name, $subject, $body));
+            if ( $new->save()) {
+                return redirect("/login");
+            }            
         }
     }
     public function TambahKategori(Request $req)
@@ -270,14 +274,14 @@ class userController extends Controller
     }
     public function TambahPromo(Request $req)
     {
-        $nama = $req->Nama;
-        $Potongan = $req->Potongan;
-        $des = $req->Deskripsi;
-        $awal = $req->TGL_Awal;
-        $akhir = $req->TGL_Akhir;
+        $Nama = $req->nama;
+        $Potongan = $req->potongan;
+        $Deskripsi = $req->deskripsi;
+        $TGL_Start = $req->tgl_start;
+        $TGL_END = $req->tgl_end;
         //echo $des;
         $AddPromo = new Promo();
-        $AddPromo->Add($nama,$Potongan,$des,$awal,$akhir);
+        $AddPromo->Add($Nama,$Potongan,$Deskripsi,$TGL_Start,$TGL_END);
         return redirect("/admin/Promo");
     }
     public function HapusPromo($id)
@@ -461,10 +465,26 @@ class userController extends Controller
         $new = new topup();
         $new->Id_user = $req->mengid;
         $new->Nominal = $req->nom;
-        $new->save();
-        return redirect()->back();
+        $res = $new->save();
+
+        if($res) {
+            $param = Session::get('login');
+            $data = DB::select("select * from users where username = '$param'");
+            $saldo = 0;
+            $id = 0;
+            foreach ($data as $key ) {
+                $id = $key->id;
+                $saldo = $key->Saldo;
+            }
+            foreach ($data as $key) $saldo = $key->Saldo;
+            $saldo = (int)$saldo+ (int)$req->nom;
+            DB::table('users')->where('id', $id)->update(['Saldo'=> $saldo]);
+        }
+
+        return redirect("/Home");
     }
 
+<<<<<<< HEAD
     //BARU
     public function showLogin (Request $request){
         if (Session::get('userLoggedIn')){
@@ -505,4 +525,32 @@ class userController extends Controller
         Session::forget('userLoggedIn');
         return redirect("/login");
     }
+=======
+    public function pup(){
+    Schema::table('users', function (Blueprint $table) {
+        $table->decimal('saldo', 10, 2)->default(0.00);
+    });
+
+    }
+
+    public function tambahSaldo($jumlah)
+    {   
+        $baru = new Users();
+        $baru->nom += $jumlah;
+        $this->save();
+    }
+
+    public function tambahSaldoUser($usersId, $jumlah)
+{
+    $user = Users::find($usersId);
+
+    if ($user) {
+        $user->tambahSaldo($jumlah);
+        return "Saldo berhasil ditambahkan untuk pengguna dengan ID $usersId.";
+    } else {
+        return "Pengguna dengan ID $usersId tidak ditemukan.";
+    }
+}
+ 
+>>>>>>> 7c28ded32cad94d0e3decc605341b0de20db45c9
 }
