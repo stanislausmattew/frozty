@@ -33,7 +33,7 @@ class userController extends Controller
         $saldo = $key->Saldo;
         }
         return view("user.home-user",['Saldo'=>$saldo]);
-       
+
     }
     public function Logout()
     {
@@ -220,7 +220,7 @@ class userController extends Controller
         //echo $id;
         $nama = $req->NamaKategori;
         $gambar = $req->Logo;
-        $namagambar = "Logo" . $id . '.'. $gambar->getClientOriginalExtension();// klu png ya png klaau jpg seterusnya 
+        $namagambar = "Logo" . $id . '.'. $gambar->getClientOriginalExtension();// klu png ya png klaau jpg seterusnya
         DB::table('product')->where('id', $id)->update([
         'Nama'=>$nama,
         'Gambar'=>$namagambar
@@ -350,23 +350,23 @@ class userController extends Controller
         if ($Saldo < 0) {
             // return redirect("/user/History")->with('eror','Kamu gagal gpp coba lagi ya ');
             return view('user.history-user',['status'=>'jangan sedih kalau belum masuk bisa ulang tahun depan ']);
-            
+
         }
 
         else {
             DB::table('users')->where('id', $idusers)->update([
                 'Saldo'=>$Saldo
             ]);
-    
+
             DB::table('transaksi')->where('id', $id)->update([
                 'Status'=>2
             ]);
 
             return view('user.history-user',['status'=>'saldo masuk ya ']);
-            
+
             // return redirect("/user/History");
         }
-      
+
     }
     public function Up($id)
     {
@@ -425,7 +425,7 @@ class userController extends Controller
         return view("usertransaksi");
     }
 
-    public function Psukses(Request $req){    
+    public function Psukses(Request $req){
 
         $new = new trans();
         $new->ID_User = $req->ID_User;
@@ -455,8 +455,8 @@ class userController extends Controller
     public function Pmengtopup() {
         return view("topup");
     }
-    
-    public function Ptopup(Request $req){    
+
+    public function Ptopup(Request $req){
 
         $new = new topup();
         $new->Id_user = $req->mengid;
@@ -464,5 +464,45 @@ class userController extends Controller
         $new->save();
         return redirect()->back();
     }
- 
+
+    //BARU
+    public function showLogin (Request $request){
+        if (Session::get('userLoggedIn')){
+            return redirect("/index");
+        }
+        return view ('/adminlogin');
+    }
+
+    public function loginAdmin(Request $req){
+        //VALIDASI, KARENA HIDUP PERLU VALIDASI
+        $rules = [
+            'username' => 'required',
+            'password' => 'required'
+        ];
+        $message = [
+            "required" => " Harap diisi!"
+        ];
+        $req -> validate ($rules, $message);
+
+        $cekUser = Users::where("username", "=", $req->username)->where("password", "=", $req->password)->first();
+        $cekAdmin = Users::where("username", "=", $req->username)->where("status", ">", 1)->first();
+
+        if ($cekUser!=[]){
+            if ($cekAdmin!=[]){
+                Session::put('userLoggedIn', $cekUser);
+                return redirect("/index");
+            }
+            else{
+                return redirect()->back()->with("msg", "Pastikan akun yang anda masukkan adalah admin!");
+            }
+        }
+        else {
+            return redirect()->back()->with("msg", "Pastikan username dan password benar!");
+        }
+    }
+
+    public function logoutAdmin(){
+        Session::forget('userLoggedIn');
+        return redirect("/login");
+    }
 }

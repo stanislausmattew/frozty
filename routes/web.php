@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\userController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -78,3 +79,31 @@ Route::post("/Search/Users",[userController::class,"SUsers"]);
 Route::post("/Search/Pesanan",[userController::class,"Spesanan"]);
 Route::post("/Search/Promo",[userController::class,"Spromo"]);
 
+//BARU
+Route::get('adminlogin', [UserController::class,'showLogin']);
+Route::post('adminlogin', [UserController::class,'loginAdmin']);
+
+Route::get('/adminakun', [AdminController::class,'showAkun']);
+
+Route::get('/adminproduk', [AdminController::class,'viewProduct']);
+Route::post('adminproduk',[AdminController::class,'tambahProduk']);
+
+Route::get("/Aktif/{id}",[AdminController::class,'Aktif']);
+Route::get("/Hapus/{id}",[AdminController::class,'Hapus']);
+
+Route::get('adminorder', [AdminController::class,'viewOrder']);
+Route::get("/updateOrder/{id}",[AdminController::class,'updateOrder']);
+
+Route::get('adminlaporan', [AdminController::class, 'viewTransaksi']);
+
+Route::get('adminpromo', [AdminController::class, 'viewPromo']);
+Route::post('adminpromo', [AdminController::class,'tambahPromo']);
+Route::get("/hapusPromo/{id}",[AdminController::class,'hapusPromo']);
+
+Route::get("/Unban/{id}",[AdminController::class,'Unban']);
+Route::get("/Ban/{id}",[AdminController::class,'Ban']);
+Route::get('index', [AdminController::class,'showIndex']);
+Route::get('adminLogout', [AdminController::class, 'adminLogout']);
+
+Route::get("admincreate",[AdminController::class,'showCreate']);
+Route::post("admincreate",[AdminController::class,'register']);
